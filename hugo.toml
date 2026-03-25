@@ -1,0 +1,19 @@
+baseURL = "https://daegwan00.github.io/"
+languageCode = "ko-KR"
+title = "No-En Archive"
+theme = "PaperMod"
+paginate = 10
+
+[params]
+  ShowReadingTime = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+
+[params.homeInfoParams]
+  Title = "👋 ACK"
+  Content = "Beyond my Limit"
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/daegwan00"
