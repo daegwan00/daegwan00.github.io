@@ -30,7 +30,7 @@ async function getReadyPages(databaseId) {
       database_id: databaseId,
       filter: {
         property: 'status',
-        status: { equals: '완료' },
+        select: { equals: '완료' },
       },
     });
     return res.results;
