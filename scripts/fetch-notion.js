@@ -74,7 +74,7 @@ async function updateStatusPublished(pageId) {
   await notion.pages.update({
     page_id: pageId,
     properties: {
-      status: { status: { name: '완료' } },
+      status: { status: { name: '진행 중' } },
     },
   });
 }
