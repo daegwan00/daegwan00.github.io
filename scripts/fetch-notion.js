@@ -80,9 +80,6 @@ async function updateStatusPublished(pageId) {
 }
 
 async function main() {
-  if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-  }
 
   let totalNew = 0;
 
