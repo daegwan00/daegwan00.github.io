@@ -1,19 +1,15 @@
 baseURL = "https://daegwan00.github.io/"
 languageCode = "ko-KR"
-title = "No-En Archive"
-theme = "PaperMod"
-paginate = 10
+title = "ACK"
+theme = "Book"
 
 [params]
-  ShowReadingTime = true
-  ShowPostNavLinks = true
-  ShowBreadCrumbs = true
-  ShowCodeCopyButtons = true
+  BookTheme = "auto"
+  BookToC = true
+  BookSearch = true
+  BookComments = false
+  BookMenuBundle = false
 
-[params.homeInfoParams]
-  Title = "👋 ACK"
-  Content = "Beyond my Limit"
-
-[[params.socialIcons]]
-  name = "github"
-  url = "https://github.com/daegwan00"
+[taxonomies]
+  category = "categories"
+  tag = "tags"

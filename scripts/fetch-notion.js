@@ -14,7 +14,9 @@ const DATABASES = [
   { id: process.env.NOTION_DATABASE_ID_SYSTEM, category: 'system' },
 ];
 
-const OUTPUT_DIR = path.join(__dirname, '../content/posts');
+function getOutputDir(category) { 
+  return path.join(__dirname, '../content/docs/${category}'); 
+}
 
 function slugify(text) {
   return text
@@ -94,8 +96,9 @@ async function main() {
     for (const page of pages) {
       try {
         const { slug, content, pageId, title } = await convertPage(page, db.category);
-        const filePath = path.join(OUTPUT_DIR, `${slug}.md`);
-
+        const outPutDir = getOutputDir(category);
+        if (!fs.existSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+        const filePath = path.join(outputDir, '${slug}.md');
         fs.writeFileSync(filePath, content, 'utf-8');
         console.log(`  ✅ 변환 완료: ${title}`);
 
