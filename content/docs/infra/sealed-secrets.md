@@ -6,16 +6,25 @@ tags: ["sealed"]
 draft: false
 ---
 
+
+## 개요
+
 - sealed secrets는 k8s에서 중요한 key,value를 암호화하기 위해서 사용되는 소프트웨어
 - Git에 중요한 값을 올려야하는 경우 암호화를 통해 올려야하고, git에 올려야하는 이유는 argocd가 이 key 값들을 읽어야 app에 적용을 시킬 수 있기 때문이다
 
-```javascript
+## 설치
+
+
+```bash
 brew install kubeseal
 ```
 
+
+## 암호화 방법 
+
 - 중요한 chart ex) postgresql, redis 같은 데이터베이스 chart들은 비밀번호등 중요한 값이 필요로 하게 됨
 
-```javascript
+```bash
 # 1. 일반 K8s Secret을 kubeseal로 암호화
 kubectl create secret generic pgadmin-secret \
   --from-literal=email=$PGADMIN_EMAIL \
@@ -27,7 +36,7 @@ kubectl create secret generic pgadmin-secret \
 ```
 
 
-```javascript
+```bash
 cat ~/dg/whereToday/infra/charts/pgadmin/templates/sealed-secret.yaml
 ```
 
