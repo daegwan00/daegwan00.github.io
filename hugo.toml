@@ -7,7 +7,6 @@ theme = "Book"
   BookTheme = "auto"
   BookToC = true
   BookSearch = true
-  BookComments = false
   BookMenuBundle = false
 
 [taxonomies]
