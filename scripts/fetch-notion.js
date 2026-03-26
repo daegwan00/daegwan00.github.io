@@ -14,8 +14,9 @@ const DATABASES = [
   { id: process.env.NOTION_DATABASE_ID_SYSTEM, category: 'system' },
 ];
 
-function getOutputDir(category) { 
-  return path.join(__dirname, `../content/docs/${category}`); 
+function getOutputDir(category) {
+  // ✅ Step 1: 저장 경로를 docs에서 posts로 변경하여 SeoTax 테마 규격에 맞춤
+  return path.join(__dirname, `../content/posts/${category}`);
 }
 
 function slugify(text) {
@@ -53,15 +54,27 @@ async function convertPage(page, category) {
   const dirProp = page.properties['Directory'];
   const directory = dirProp?.select?.name ?? category;
 
+  // ✅ Step 2: Notion의 'categories' (다중 선택) 속성 파싱 및 예외 처리(Fallback)
+  const catProp = page.properties['categories'];
+  let categoriesArray = [category]; // 기본값: DB에 매핑된 카테고리 이름
+
+  if (catProp && catProp.type === 'multi_select' && catProp.multi_select.length > 0) {
+    // [{name: "Infra"}] 형태의 객체 배열에서 "Infra" 문자열만 뽑아냄
+    categoriesArray = catProp.multi_select.map(c => c.name);
+  }
+  // 배열을 YAML 호환 포맷의 문자열로 변환 (예: '["Infra", "AWS"]')
+  const categoriesString = JSON.stringify(categoriesArray);
+
   // Notion → Markdown → 파일 저장
   const mdBlocks = await n2m.pageToMarkdown(page.id);
   console.log('블록 샘플:', JSON.stringify(mdBlocks.slice(0,5), null, 2));
   const { parent: mdContent } = n2m.toMarkdownString(mdBlocks);
 
+  // ✅ Step 3: Front Matter에 동적으로 파싱한 카테고리 데이터 주입
   const frontMatter = `---
 title: "${title}"
 date: ${date}
-categories: ["${category}"]
+categories: ${categoriesString}
 tags: ["${directory}"]
 draft: false
 ---

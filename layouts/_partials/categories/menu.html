@@ -1,0 +1,94 @@
+{{ if .Site.Taxonomies.categories }}
+<div class="book-categories">
+  <input type="checkbox" class="hidden toggle" id="categories-control" checked />
+  <label for="categories-control" class="categories-toggle categories-link">
+    <a href="/categories/">
+      <i class="fa-solid fa-folder"></i>
+      <span>{{ default "Categories" .Site.Params.BookMenu.categoriesLabel }}</span>
+      <span class="category-count">({{ len (where .Site.RegularPages "Section" "docs") }})</span>
+    </a>
+    <i class="fa-solid fa-chevron-down categories-arrow"></i>
+  </label>
+
+  <ul class="categories-menu" id="categories-menu">
+    {{/* Build category tree */}}
+    {{ $categoryTree := dict }}
+    {{ range (where .Site.RegularPages "Section" "docs") }}
+      {{ if .Params.categories }}
+        {{ $parent := partial "categories/value-first" .Params.categories | string }}
+        {{ if $parent }}
+          {{/* Build tree structure for parent category */}}
+          {{ if not (index $categoryTree $parent) }}
+            {{ $categoryTree = $categoryTree | merge (dict $parent dict) }}
+          {{ end }}
+
+          {{ $child := partial "categories/value-second" .Params.categories | string }}
+          {{ if $child }}
+            {{/* Build tree structure for child category */}}
+            {{ $children := index $categoryTree $parent }}
+            {{ if not (index $children $child) }}
+              {{ $children = $children | merge (dict $child dict) }}
+              {{ $categoryTree = $categoryTree | merge (dict $parent $children) }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+
+    {{ range $parent, $children := $categoryTree }}
+
+    {{/* Count parent category */}}
+    {{ $parentCount := 0 }}
+    {{ range (where $.Site.RegularPages "Section" "docs") }}
+      {{ if .Params.categories }}
+        {{ if eq $parent (partial "categories/value-first" .Params.categories | string) }}
+          {{ $parentCount = add $parentCount 1 }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+
+    <li>
+      {{ if $children }}
+      <input type="checkbox" class="hidden toggle" id="cat-{{ $parent | urlize }}" />
+      <label for="cat-{{ $parent | urlize }}" class="categories-toggle categories-link">
+        <a href="/categories/{{ $parent | urlize }}/">
+          <i class="fa-solid fa-folder"></i>
+          {{ $parent }}
+          <span class="category-count">({{ $parentCount }})</span>
+        </a>
+        <i class="fa-solid fa-chevron-down categories-arrow"></i>
+      </label>
+      <ul>
+        {{ range $child, $_ := $children }}
+
+        {{/* Count child category */}}
+        {{ $childCount := 0 }}
+        {{ range (where $.Site.RegularPages "Section" "docs") }}
+          {{ if .Params.categories }}
+            {{ if eq (printf "%s/%s" $parent $child) (partial "categories/value" .Params.categories | string) }}
+              {{ $childCount = add $childCount 1 }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+
+        <li class="categories-link">
+          <a href="/categories/{{ $parent | urlize }}/{{ $child | urlize }}/">
+            <i class="fa-solid fa-file"></i>
+            {{ $child }}
+            <span class="category-count">({{ $childCount }})</span>
+          </a>
+        </li>
+        {{ end }}
+      </ul>
+      {{ else }}
+      <a href="/categories/{{ $parent | urlize }}/">
+        <i class="fa-solid fa-file"></i>
+        {{ $parent }}
+        <span class="category-count">({{ $parentCount }})</span>
+      </a>
+      {{ end }}
+    </li>
+    {{ end }}
+  </ul>
+</div>
+{{ end }}
