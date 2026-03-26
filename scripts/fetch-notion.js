@@ -15,7 +15,7 @@ const DATABASES = [
 ];
 
 function getOutputDir(category) { 
-  return path.join(__dirname, '../content/docs/${category}'); 
+  return path.join(__dirname, `../content/docs/${category}`); 
 }
 
 function slugify(text) {
@@ -93,9 +93,9 @@ async function main() {
     for (const page of pages) {
       try {
         const { slug, content, pageId, title } = await convertPage(page, db.category);
-        const outPutDir = getOutputDir(category);
-        if (!fs.existSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
-        const filePath = path.join(outputDir, '${slug}.md');
+        const outPutDir = getOutputDir(db.category);
+        if (!fs.existsSync(outPutDir)) fs.mkdirSync(outPutDir, { recursive: true });
+        const filePath = path.join(outPutDir, `${slug}.md`);
         fs.writeFileSync(filePath, content, 'utf-8');
         console.log(`  ✅ 변환 완료: ${title}`);
 
