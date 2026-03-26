@@ -55,6 +55,7 @@ async function convertPage(page, category) {
 
   // Notion → Markdown → 파일 저장
   const mdBlocks = await n2m.pageToMarkdown(page.id);
+  console.log('블록 샘플:', JSON.stringify(mdBlocks.slice(0,5), null, 2));
   const { parent: mdContent } = n2m.toMarkdownString(mdBlocks);
 
   const frontMatter = `---
