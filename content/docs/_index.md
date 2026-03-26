@@ -1,5 +1,5 @@
 ---
-title: "AWS"
-weight: 2
+title: "Categories"
+weight: 1
 bookCollapseSection: true
 ---
