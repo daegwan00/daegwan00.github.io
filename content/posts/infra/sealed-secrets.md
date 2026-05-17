@@ -1,6 +1,6 @@
 ---
 title: "sealed-secrets"
-date: 2026-05-16
+date: 2026-05-17
 categories: ["infra"]
 tags: ["sealed"]
 draft: false
